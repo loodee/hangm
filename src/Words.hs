@@ -1,7 +1,13 @@
 {- Module for handling importing of words from an external file,
    providing functions for getting random words etc. -}
 
-module Words where
+module Words
+    ( HangWord
+    , Letter
+    , hangWord
+    , importWords
+    , randomWord
+    ) where
 
 type HangWord = [Letter]
 
