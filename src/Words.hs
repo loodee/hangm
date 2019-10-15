@@ -28,12 +28,14 @@ toChar (Visible c) = c
 toChar (Hidden _)  = '_'
 
 -- | Parses and imports words from an external source (such as a text file).
-importWords :: IO [String]
-importWords = error "(TODO) Not yet implemented"
+importWords :: String -> IO [String]
+importWords filepath = do
+    ws <- readFile filepath
+    return $ words ws
 
 -- | Builds a fully hidden HangWord from a String.
 hangWord :: String -> HangWord
-hangWord xs = error "(TODO) Not yet implemented"
+hangWord xs = [Hidden c | c <- xs]
 
 -- | Selects a string from a list at random and returns its corresponding
 --   HangWord. Use this to get a word at the start of a game.
