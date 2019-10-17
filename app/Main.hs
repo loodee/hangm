@@ -1,6 +1,10 @@
 module Main where
 
-import Hangman
+import System.IO
+
+import Hangman (play)
 
 main :: IO ()
-main = putStrLn "Hello, world"
+main = do
+    hSetBuffering stdout NoBuffering
+    play
