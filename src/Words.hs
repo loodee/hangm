@@ -10,9 +10,11 @@ module Words
     , importWords
     , randomWord
     , toChar
+    , reveal
     ) where
 
 import Data.List (intersperse)
+import System.Random
 
 type HangWord = [Letter]
 
@@ -40,4 +42,11 @@ hangWord xs = [Hidden c | c <- xs]
 -- | Selects a string from a list at random and returns its corresponding
 --   HangWord. Use this to get a word at the start of a game.
 randomWord :: [String] -> IO HangWord
-randomWord xs = error "(TODO) Not yet implemented"
+randomWord xs = do
+    rand <- randomRIO (0, length xs - 1)
+    return (hangWord (xs !! rand))
+
+reveal :: Char -> HangWord -> HangWord
+reveal x []  = []
+reveal x (h:hs) | h == Hidden x = (Visible x):(reveal x hs)
+                | otherwise = h:(reveal x hs)
