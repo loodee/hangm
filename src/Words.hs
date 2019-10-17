@@ -13,6 +13,7 @@ module Words
     ) where
 
 import Data.List (intersperse)
+import System.Random
 
 type HangWord = [Letter]
 
@@ -40,4 +41,7 @@ hangWord xs = [Hidden c | c <- xs]
 -- | Selects a string from a list at random and returns its corresponding
 --   HangWord. Use this to get a word at the start of a game.
 randomWord :: [String] -> IO HangWord
-randomWord xs = error "(TODO) Not yet implemented"
+randomWord xs = do
+    rand <- randomRIO (0, length xs - 1)
+    return (hangWord (xs !! rand))
+
