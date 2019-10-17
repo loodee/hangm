@@ -10,6 +10,7 @@ module Words
     , importWords
     , randomWord
     , toChar
+    , reveal
     ) where
 
 import Data.List (intersperse)
@@ -45,3 +46,7 @@ randomWord xs = do
     rand <- randomRIO (0, length xs - 1)
     return (hangWord (xs !! rand))
 
+reveal :: Char -> HangWord -> HangWord
+reveal x []  = []
+reveal x (h:hs) | h == Hidden x = (Visible x):(reveal x hs)
+                | otherwise = h:(reveal x hs)
