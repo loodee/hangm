@@ -4,12 +4,20 @@ module Hangman
 
 import Data.Char (isAlpha)
 
-play :: IO ()
-play = do
-    letter <- getInput
+import Words (HangWord, reveal)
 
-    -- TODO: Logic for updating state depending on guessed letter
-    play
+play :: HangWord -> IO HangWord
+play hWord = do
+    showGameStatus hWord
+
+    -- Get player input and process the guess.
+    letter <- getInput
+    play $ reveal letter hWord
+
+showGameStatus :: HangWord -> IO ()
+showGameStatus hWord = do
+    -- TODO: Show game status with hill and wrong characters etc.
+    putStrLn $ "Word: " ++ show hWord
 
 getInput :: IO Char
 getInput = do
