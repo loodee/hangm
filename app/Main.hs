@@ -9,5 +9,5 @@ main :: IO ()
 main = do
     hSetBuffering stdout NoBuffering
 
-    play =<< randomWord =<< importWords "words.txt"
-    putStrLn "Game finished."
+    print =<<  play =<< randomWord =<< importWords "words.txt"
+

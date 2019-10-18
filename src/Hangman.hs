@@ -3,8 +3,7 @@ module Hangman
     ) where
 
 import Data.Char (isAlpha)
-
-import Words (HangWord, reveal)
+import Words (HangWord, reveal,isRevealed)
 
 play :: HangWord -> IO HangWord
 play hWord = do
@@ -12,7 +11,10 @@ play hWord = do
 
     -- Get player input and process the guess.
     letter <- getInput
-    play $ reveal letter hWord
+
+    let tmp = reveal letter hWord
+    if (not . isRevealed) tmp then play tmp else return tmp
+
 
 showGameStatus :: HangWord -> IO ()
 showGameStatus hWord = do

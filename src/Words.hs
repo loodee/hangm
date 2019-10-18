@@ -11,6 +11,7 @@ module Words
     , randomWord
     , toChar
     , reveal
+    , isRevealed
     ) where
 
 import Data.List (intersperse)
@@ -50,3 +51,10 @@ reveal :: Char -> HangWord -> HangWord
 reveal x []  = []
 reveal x (h:hs) | h == Hidden x = (Visible x):(reveal x hs)
                 | otherwise = h:(reveal x hs)
+
+
+isRevealed :: HangWord -> Bool
+isRevealed h = all isRev h
+  where
+    isRev (Visible _) = True
+    isRev n           = False
