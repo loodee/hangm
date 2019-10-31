@@ -14,6 +14,7 @@ module Words
     , toChar
     ) where
 
+import Data.Char (toUpper)
 import Data.List (intersperse)
 import System.Random
 
@@ -40,7 +41,7 @@ importWords filepath = do
 
 -- | Builds a fully hidden HangWord from a String.
 hangWord :: String -> HangWord
-hangWord xs = [Hidden c | c <- xs]
+hangWord xs = [Hidden (toUpper c) | c <- xs]
 
 -- | Selects a string from a list at random and returns its corresponding
 --   HangWord. Use this to get a word at the start of a game.
@@ -51,7 +52,7 @@ randomWord xs = do
 
 guess :: Char -> HangWord -> Maybe HangWord
 guess c hWord = fromBool (hWord /= newWord) newWord
-    where newWord = map (tryReveal c) hWord
+    where newWord = map ((tryReveal . toUpper) c) hWord
           tryReveal :: Char -> Letter -> Letter
           tryReveal c l | l == (Hidden c) = Visible c
                         | otherwise = l
