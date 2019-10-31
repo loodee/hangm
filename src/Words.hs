@@ -6,16 +6,18 @@
 module Words
     ( HangWord
     , Letter (Visible, Hidden)
+    , guess
     , hangWord
     , importWords
+    , isRevealed
     , randomWord
     , toChar
-    , reveal
-    , isRevealed
     ) where
 
 import Data.List (intersperse)
 import System.Random
+
+import Utility (fromBool)
 
 type HangWord = [Letter]
 
@@ -47,11 +49,12 @@ randomWord xs = do
     rand <- randomRIO (0, length xs - 1)
     return (hangWord (xs !! rand))
 
-reveal :: Char -> HangWord -> HangWord
-reveal x []  = []
-reveal x (h:hs) | h == Hidden x = (Visible x):(reveal x hs)
-                | otherwise = h:(reveal x hs)
-
+guess :: Char -> HangWord -> Maybe HangWord
+guess c hWord = fromBool (hWord /= newWord) newWord
+    where newWord = map (tryReveal c) hWord
+          tryReveal :: Char -> Letter -> Letter
+          tryReveal c l | l == (Hidden c) = Visible c
+                        | otherwise = l
 
 isRevealed :: HangWord -> Bool
 isRevealed h = all isRev h

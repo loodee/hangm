@@ -1,24 +1,44 @@
 module Hangman
-    ( play
+    ( GameState (GameState)
+    , play
     ) where
 
 import Data.Char (isAlpha)
-import Words (HangWord, reveal,isRevealed)
 
-play :: HangWord -> IO HangWord
-play hWord = do
-    showGameStatus hWord
+import Utility (fromBool)
+import Words
+    ( HangWord
+    , guess
+    , isRevealed
+    , randomWord
+    )
+
+data GameState = GameState HangWord Lives
+
+type Lives = Int
+
+play :: GameState -> IO GameState
+play gs@(GameState hWord lives) = do
+    showGameStatus gs
 
     -- Get player input and process the guess.
-    letter <- getInput
+    char <- getInput
 
-    let tmp = reveal letter hWord
-    if (not . isRevealed) tmp then play tmp else return tmp
+    let newGS@(GameState newWord newLives) = updateState char hWord
 
+    if isRevealed newWord
+        then return newGS
+        else play newGS
 
-showGameStatus :: HangWord -> IO ()
-showGameStatus hWord = do
+   where updateState c w = case guess c w of
+                            Just nw -> GameState nw lives
+                            Nothing -> GameState w (lives - 1)
+
+showGameStatus :: GameState -> IO ()
+showGameStatus (GameState hWord lives) = do
     -- TODO: Show game status with hill and wrong characters etc.
+    putStrLn ""
+    putStrLn $ "❤️: " ++ show lives
     putStrLn $ "Word: " ++ show hWord
 
 getInput :: IO Char
@@ -32,4 +52,3 @@ getInput = do
 validateString :: String -> Maybe Char
 validateString xs = fromBool (valid xs) (head xs)
     where valid xs = length xs == 1 && isAlpha (head xs)
-          fromBool p = if p then Just else const Nothing
