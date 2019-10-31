@@ -11,6 +11,7 @@ module Words
     , importWords
     , isRevealed
     , randomWord
+    , revealAll
     , toChar
     ) where
 
@@ -56,6 +57,12 @@ guess c hWord = fromBool (hWord /= newWord) newWord
           tryReveal :: Char -> Letter -> Letter
           tryReveal c l | l == (Hidden c) = Visible c
                         | otherwise = l
+
+-- | Set all letters of a HangWord to be visible.
+revealAll :: HangWord -> HangWord
+revealAll w = map revealLetter w
+    where revealLetter (Hidden c) = Visible c
+          revealLetter l = l
 
 isRevealed :: HangWord -> Bool
 isRevealed h = all isRev h

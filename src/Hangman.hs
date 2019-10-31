@@ -11,6 +11,7 @@ import Words
     , guess
     , isRevealed
     , randomWord
+    , revealAll
     )
 
 data GameState = GameState HangWord Lives
@@ -36,11 +37,22 @@ play gs@(GameState hWord lives) = do
                                             then win gs
                                             else play gs
 
+-- | Print information about the game (such as the correct word) and
+--   return the game state.
 loss :: GameState -> IO GameState
-loss gs = undefined
+loss gs@(GameState word _) = do
+    putStrLn "Game over!"
+    putStrLn $ "The correct word was: " ++ (show . revealAll) word
+    return gs
 
+-- | Print information about the game (such as the remaining lives)
+--   and return the game state.
 win :: GameState -> IO GameState
-win gs = undefined
+win gs@(GameState word lives) = do
+    putStrLn "You win!"
+    putStrLn $ "Correctly guessed the word: " ++ show word
+    putStrLn $ "Lives remaining: " ++ show lives
+    return gs
 
 showGameStatus :: GameState -> IO ()
 showGameStatus (GameState hWord lives) = do

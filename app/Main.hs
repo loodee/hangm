@@ -19,4 +19,4 @@ main = do
         >>= randomWord
         >>= \hWord -> play (GameState hWord lives)
 
-    print w
+    return ()
