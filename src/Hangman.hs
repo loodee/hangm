@@ -26,13 +26,21 @@ play gs@(GameState hWord lives) = do
 
     let newGS@(GameState newWord newLives) = updateState char hWord
 
-    if isRevealed newWord
-        then return newGS
-        else play newGS
+    gameAction newGS
 
-   where updateState c w = case guess c w of
-                            Just nw -> GameState nw lives
-                            Nothing -> GameState w (lives - 1)
+    where updateState c w = case guess c w of
+                                Just nw -> GameState nw lives
+                                Nothing -> GameState w $ lives - 1
+          gameAction gs@(GameState _ 0) = loss gs
+          gameAction gs@(GameState w _) = if isRevealed w
+                                            then win gs
+                                            else play gs
+
+loss :: GameState -> IO GameState
+loss gs = undefined
+
+win :: GameState -> IO GameState
+win gs = undefined
 
 showGameStatus :: GameState -> IO ()
 showGameStatus (GameState hWord lives) = do
